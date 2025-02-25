@@ -1,0 +1,16 @@
+[
+  {
+    "id": "admin_id",
+    "pw": "admin_pw_123",
+    "name": "관리자1",
+    "phone": "010-0000-0000",
+    "role": "관리자"
+  },
+  {
+    "id": "jungjjh235",
+    "pw": "qwerasdf",
+    "name": "홍길동",
+    "phone": "010-1234-5678",
+    "role": "직원"
+  }
+]
