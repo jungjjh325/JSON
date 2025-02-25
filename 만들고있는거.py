@@ -225,7 +225,7 @@ class Admin_Member_Manager:
 
         print('📋 직원 목록:')
         pretty.field_names = ['번호', 'ID', 'PW', '이름', '전화번호', '권한']
-        
+
         try:
             with open(pending_staff_file, 'r', encoding='utf-8') as pending_files:
                 pending_data = json.load(pending_files)
@@ -249,13 +249,11 @@ class Admin_Member_Manager:
         print(pretty)
         print()
 
-        pending_choice = valid('승인(y/n): ', ['Y', 'y', 'N', 'n'])
-        # 승인 y/n 이랑 승인할 직원 번호 위치를 바꿔야 함
-        # 승인 먼저 뜨고 직원 번호가 뜨는 형식
-        if pending_choice.lower() == 'y':
-            try:
-                pending_staff_number = valid('승인할 직원 번호: ', is_int=True) - 1
+        try:
+            pending_staff_number = valid('승인할 직원 번호: ', is_int=True) - 1
+            pending_choice = valid('승인(y/n): ', ['Y', 'y', 'N', 'n'])
 
+            if pending_choice.lower() == 'y':
                 if 0 <= pending_staff_number < len(pending_data):
                     approved_user = pending_data.pop(pending_staff_number)
                     approved_user['role'] = '직원'
@@ -285,13 +283,15 @@ class Admin_Member_Manager:
                 else:
                     print('❌ 잘못된 직원 번호입니다.')
                     print()
-
-            except ValueError:
-                print('❌ 숫자를 입력해주세요.')
+            else:
+                print('❌ 직원 승인을 취소하셨습니다.')
                 print()
-        else:
-            print('❌ 직원 승인을 취소하셨습니다.')
+
+
+        except ValueError:
+            print('❌ 숫자를 입력해주세요.')
             print()
+
 
     def remove_staff(self):
         pretty = PrettyTable()
