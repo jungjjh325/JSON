@@ -167,7 +167,7 @@ class User_Manager:
                     print(f'✅ 로그인 성공! {user_id} (권한: {user.get('role', 'N/A')})')
                     print()
 
-                    return user.get('role')
+                    return user.get('role'), user
 
             attempts += 1
             print(f'❌ 로그인 실패! ({attempts}/5) 아이디 또는 비밀번호를 다시 입력해주세요.')
@@ -824,7 +824,7 @@ class Staff_Member_Manager:
             print('1-5번을 제외한 숫자는 입력할 수 없습니다.')
             print()
         
-    def communication_wiht_team_member(self):
+    def communication_wiht_team_member(self, user):
         # 공지사항 확인, 팀채팅, 1:1문의 (관리자에게) -> 공지사항 json, 팀 채팅 json, 1:1문의 json
         # 삭제 기능 미구현 해도 됨, 한다면 팀채팅, 1:1문의에 올린 채팅 삭제 정도
 
@@ -841,7 +841,7 @@ class Staff_Member_Manager:
                 if isinstance(team_communication_datas, dict):
                     team_communication_datas = [team_communication_datas]
 
-            with open('admin_inqury.json', 'r', encoding='utf-8') as admin_inquirys:
+            with open('admin_inquiry.json', 'r', encoding='utf-8') as admin_inquirys:
                 admin_inquiry_datas = json.load(admin_inquirys)
 
                 if isinstance(admin_inquiry_datas, dict):
@@ -861,7 +861,7 @@ class Staff_Member_Manager:
 
         print('🏢 [팀원과의 커뮤니케이션]')
         print('1. 공지사항 확인')
-        print('❌2. 팀 채팅')
+        print('2. 팀 채팅')
         print('❌3. 1:1문의 (관리자에게)')
         print()
 
@@ -927,11 +927,51 @@ class Staff_Member_Manager:
             print(pretty)
             print() # 관리자만 추가 가능한걸로
 
-        #elif user_choice == 2:
+        elif user_choice == 2:
             # 스탭 파일에서 로그인 되어있는 계정의 이름을 가져와야함
             # 프리티 필드는 [이름] [내용]으로만 하는걸로
             # 2번 들어와서 어떠한 키를 누르면 종료하게 되는걸로
             # 종료하기전에는 계속 채팅을 칠 수 있게 이거맞아?
+
+            user_name = [name['name'] for name in staff_datas]
+
+            if user['name'] not in user_name:
+                print(f'❌ 로그인한 계정이 직원 파일에 존재하지 않습니다.')
+                return
+
+            #print('📋 [팀 채팅]')
+
+            pretty = PrettyTable()
+            pretty.field_names = ['이름', '내용']
+            pretty.align['이름'] = 'l'
+            pretty.align['내용'] = 'l'
+
+            while True:
+                content = valid('내용 입력: ').strip()
+                exit_button = valid('종료를 원할 경우 (y/n): ', ['y', 'Y', 'n', 'N'])
+
+                pretty.add_row([user['name'], content])
+
+                print('📋 현재 채팅 기록')
+                print(pretty)
+                print()
+
+                team_communication_datas.append({user['name']: content})
+                # 딕셔너리 형태로 'you': 'uu' 이런식으로 저장되는 것 까지 구현 완료
+                # 딕셔너리 형태 1개에 계속 추가가 되는지 확인 필요
+                try:
+                    with open('team_commnuication.json', 'w', encoding='utf-8') as team_communications:
+                        json.dump(team_communication_datas, team_communications, ensure_ascii=False, indent=2)
+
+                except (FileNotFoundError, json.JSONDecodeError):
+                    team_communication_datas = []
+
+                if exit_button.lower() == 'y':
+                    print('✅ 팀 채팅 종료 ✅')
+                    print()
+                    break
+
+
 
 
 def main_menu():
@@ -957,7 +997,7 @@ def main_menu():
         elif user_choice == 2:
             user_id = valid('👤 직원 ID: ')
             password = valid('🔑 비밀번호: ')
-            role = user_manager.login(user_id, password)
+            role, user = user_manager.login(user_id, password)
 
             if role == '관리자':
                 while True:
@@ -1025,7 +1065,7 @@ def main_menu():
                         staff_member_manager.sfaff_work()
 
                     elif int_staff_choice == 4:
-                        staff_member_manager.communication_wiht_team_member()
+                        staff_member_manager.communication_wiht_team_member(user)
 
                     elif int_staff_choice == 7:
                         print('🚨 프로그램 종료 🚨')
