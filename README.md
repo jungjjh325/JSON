@@ -1,16 +1,15 @@
-## Hi there 👋
+로그인 / 회원가입
+직원과 관리자는 각자의 ID로 로그인을 할 수 있습니다.
 
-<!--
-**jungjjh325/jungjjh325** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+관리자 기능:
+직원 목록 조회: 모든 직원의 정보(ID, 비밀번호, 이름, 전화번호, 역할)를 조회할 수 있습니다.
+대기 중인 직원 승인: 승인 대기 중인 직원 계정을 승인합니다.
+직원 해고: 직원을 조직에서 해고합니다.
+직원 복직: 해고된 직원을 다시 채용합니다.
+직원 승진: 직원을 관리자 역할로 승진시킵니다.
+직원 강등: 관리자를 일반 직원으로 강등시킵니다.
 
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+직원 기능:
+개인 정보 조회 및 수정: 자신의 정보(ID, 이름, 전화번호, 역할)를 조회하고 비밀번호나 전화번호를 수정할 수 있습니다.
+업무 관리: 업무를 추가하고 완료 상태로 변경하거나 삭제할 수 있습니다.
+팀원과의 커뮤니케이션: 팀 채팅에 참여하거나 공지사항을 확인할 수 있습니다.
